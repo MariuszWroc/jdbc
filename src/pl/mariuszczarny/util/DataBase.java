@@ -1,8 +1,8 @@
 package pl.mariuszczarny.util;
 
 public enum DataBase {
-	DB_DRIVER("oracle.jdbc.driver.OracleDriver"),
-	DB_CONNECTION("jdbc:oracle:thin:@localhost:1521:MKYONG"),
+	DB_DRIVER("com.mysql.cj.jdbc.Driver"),
+	DB_CONNECTION("jdbc:mysql://127.0.0.1:3306/myjdbc"),
 	DB_USER("root"),
 	DB_PASSWORD("root");
 	

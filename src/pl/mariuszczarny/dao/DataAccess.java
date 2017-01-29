@@ -24,11 +24,11 @@ public final class DataAccess implements CommonDataAccess{
 			dbConnection = DatabaseConnector.getDBConnection();
 			statement = dbConnection.createStatement();
 
-			LOGGER.info(SqlQuery.INSERT.getQuery());
+			LOGGER.info(query.getQuery());
 
-			statement.executeUpdate(SqlQuery.INSERT.getQuery());
+			statement.executeUpdate(query.getQuery());
 
-			LOGGER.info("Record is inserted into DBUSER table!");
+			LOGGER.info("Table was created!");
 
 		} catch (SQLException e) {
 			LOGGER.log(Level.WARNING, "Driver not found. " + e.getMessage(), e);
