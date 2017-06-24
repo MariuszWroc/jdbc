@@ -1,9 +1,9 @@
 package pl.mariuszczarny.connection;
 
-import static pl.mariuszczarny.util.DataBase.DB_DRIVER;
-import static pl.mariuszczarny.util.DataBase.DB_CONNECTION;
-import static pl.mariuszczarny.util.DataBase.DB_PASSWORD;
-import static pl.mariuszczarny.util.DataBase.DB_USER;
+import static pl.mariuszczarny.util.MysqlProperties.DB_DRIVER;
+import static pl.mariuszczarny.util.MysqlProperties.DB_CONNECTION;
+import static pl.mariuszczarny.util.MysqlProperties.DB_PASSWORD;
+import static pl.mariuszczarny.util.MysqlProperties.DB_USER;
 
 import java.sql.Connection;
 import java.sql.DriverManager;

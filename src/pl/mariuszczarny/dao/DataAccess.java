@@ -1,34 +1,38 @@
 package pl.mariuszczarny.dao;
 
 import java.sql.Connection;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import pl.mariuszczarny.connection.DatabaseConnector;
-import pl.mariuszczarny.util.SqlQuery;
 
-public final class DataAccess implements CommonDataAccess{
+public final class DataAccess implements CommonDataAccess {
+	private static final String MESSAGE_AFTER_TRANSACTION = "PASSED";
 	private static Logger LOGGER = Logger.getLogger(DataAccess.class.getName());
 	private Connection dbConnection;
-	
+
 	public DataAccess(Connection dbConnection) {
 		this.dbConnection = dbConnection;
 	}
 
 	@Override
-	public String create(SqlQuery query)  throws SQLException{
+	public String read(List<String> selectQueries, String columnName) throws SQLException {
 		Statement statement = null;
+		String resultMessage = "NO SELECT RESULT";
+
 		try {
-			dbConnection = DatabaseConnector.getDBConnection();
-			statement = dbConnection.createStatement();
+			statement = openConnection();
+			for (String query : selectQueries) {
+				LOGGER.info(query);
 
-			LOGGER.info(query.getQuery());
-
-			statement.executeUpdate(query.getQuery());
-
-			LOGGER.info("Table was created!");
+				ResultSet rs = statement.executeQuery(query);
+				LOGGER.info("Table was created! " + rs.getString(columnName));
+				rs.close();
+			}
 
 		} catch (SQLException e) {
 			LOGGER.log(Level.WARNING, "Driver not found. " + e.getMessage(), e);
@@ -36,32 +40,53 @@ public final class DataAccess implements CommonDataAccess{
 			if (statement != null) {
 				statement.close();
 			}
-			if (dbConnection != null) {
-				dbConnection.close();
+		}
+		return resultMessage;
+	}
+
+	@Override
+	public void closeConnection() throws SQLException {
+		if (dbConnection != null) {
+			dbConnection.close();
+		}
+	}
+
+	private Statement openConnection() throws SQLException {
+		Statement statement;
+		if (dbConnection == null) {
+			dbConnection = DatabaseConnector.getDBConnection();
+		}
+		statement = dbConnection.createStatement();
+		return statement;
+	}
+
+	@Override
+	public int[] makeBatch(List<String> queries) throws SQLException {
+		int[] executeBatch = new int [0];
+		if (!queries.isEmpty()) {
+			dbConnection.setAutoCommit(false);
+
+			Statement statement = null;
+			try {
+				statement = openConnection();
+
+				for (String query : queries) {
+					LOGGER.info(query);
+					statement.addBatch(query);
+					LOGGER.info("Table was created!");
+				}
+
+				executeBatch = statement.executeBatch();
+				dbConnection.commit();
+			} catch (SQLException e) {
+				LOGGER.log(Level.WARNING, "Driver not found. " + e.getMessage(), e);
+			} finally {
+				if (statement != null) {
+					statement.close();
+				}
 			}
 		}
-		return null;
+
+		return executeBatch;
 	}
-	
-	@Override
-	public String read(SqlQuery query) throws SQLException{
-		@SuppressWarnings("unused")
-		Statement statement = null;
-		return null;
-	}
-	
-	@Override
-	public String update(SqlQuery query) throws SQLException{
-		@SuppressWarnings("unused")
-		Statement statement = null;
-		return null;
-	}
-	
-	@Override
-	public String delete(SqlQuery query) throws SQLException{
-		@SuppressWarnings("unused")
-		Statement statement = null;
-		return null;
-	}
-	
 }

@@ -1,0 +1,11 @@
+select readiness from product where product_number='P8C12AAE';
+select readiness from PRODUCT_TO_PRODUCT_BASE_MAP where product_number='P8C12AAE';
+select readiness from PRODUCT_BASE where product_base_id='30061631';
+select readiness from PRODUCT_VERSION where product_base_id='30061631';
+select readiness from PRODUCT_BUNDLE_TO_PBASE_MAP where product_base_id='30061631';
+select readiness from PRODUCT_MEDIA_MAP where product_version_id='30060537';
+select readiness from PRODUCT_MEDIA where media_id='10280';
+select readiness from PRODUCT_DOWNLOAD where download_id in (8450,8800);
+select readiness from PRODUCT_MEDIA_TO_DOWNLOAD where media_id='10280';
+select readiness from PRODUCT_DOWNLOAD_LANG_MAP where download_id in (8450,8800);
+select readiness from PRODUCT_DOWNLOAD_OS_MAP where download_id in (8450,8800);

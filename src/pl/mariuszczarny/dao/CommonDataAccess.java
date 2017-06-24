@@ -1,36 +1,14 @@
 package pl.mariuszczarny.dao;
 
 import java.sql.SQLException;
-
-import pl.mariuszczarny.util.SqlQuery;
+import java.util.List;
 
 /**
  * @author Mariusz Czarny
  *
  */
 public interface CommonDataAccess {
-	/**
-	 * @param statement
-	 * @return
-	 * @throws SQLException
-	 */
-	String create(SqlQuery statement) throws SQLException;
-	/**
-	 * @param statement
-	 * @return
-	 * @throws SQLException
-	 */
-	String read(SqlQuery statement) throws SQLException;
-	/**
-	 * @param statement
-	 * @return
-	 * @throws SQLException
-	 */
-	String update(SqlQuery statement) throws SQLException;
-	/**
-	 * @param statement
-	 * @return
-	 * @throws SQLException
-	 */
-	String delete(SqlQuery statement) throws SQLException;
+	String read(List<String> selectQueries, String columnName) throws SQLException;
+	void closeConnection() throws SQLException;
+	int[] makeBatch(List<String> queries) throws SQLException;
 }
